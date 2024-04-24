@@ -9,7 +9,8 @@
 <p>This is a paragraph.</p>
 <table>
   <tr>
-    <th>Datetime</th>
+    <th>Date</th>
+    <th>time</th>
     <th>Quantity Total</th>
     <th>Average Price</th>
     <th>Min Price</th>
@@ -18,7 +19,8 @@
 
   {% for item in items %}
   <tr>
-    <td>{{ item.datetime }}</td>
+    <td>{{ item.date}}</td>
+    <td>{{ item.time }}</td>
     <td>{{ item.quantity_total }}</td>
     <td>{{ item.average_price }}</td>
     <td>{{ item.min_price }}</td>
@@ -40,7 +42,7 @@
   new Chart(ctx, {
       type: 'line',
       data: {
-          labels: [{% for item in items %}"{{ item.datetime }}", {% endfor %}],
+          labels: [{% for item in items %}"{{ item.time }}", {% endfor %}],
           datasets: [{
               label: 'My First Dataset',
               data: [{% for item in items %}{{ item.average_price }}, {% endfor %}],
@@ -52,7 +54,7 @@
       options: {
           scales: {
               y: {
-                  beginAtZero: true
+                  beginAtZero: false
               }
           }
       }

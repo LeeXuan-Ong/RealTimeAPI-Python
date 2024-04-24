@@ -16,7 +16,7 @@ async def send_message(message):
           if(response != ""):
             print("Data sent successfully")
         except websockets.exceptions.ConnectionClosedError:
-          print("Connection closed by server")
+          print("Connection closed by server - something is wrong server not responding")
           pass
 
 df = pd.read_csv('AAPL.csv')

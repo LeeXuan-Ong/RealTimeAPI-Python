@@ -2,7 +2,7 @@ from fastapi import FastAPI , WebSocket, WebSocketDisconnect, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 import json
-
+import datetime
 
 app = FastAPI()
 
@@ -40,8 +40,9 @@ async def websocket_endpoint(websocket: WebSocket):
             if(float(data['price'])<min_price):
               min_price = float(data['price'])
             print(f"Data received: {data}")
-            
-        cache_data.append({"datetime": json_data[0]['datetime'],"quantity_total": quantity, "average_price": average_prices, "min_price": min_price, "max_price": max_price})
+        
+        record_datetime = datetime.datetime.strptime(json_data[0]['datetime'], '%Y-%m-%d %H:%M:%S:%f')
+        cache_data.append({"date": record_datetime.date(), "time": "{:d}:{:02d}:{:02d}".format(record_datetime.hour,record_datetime.minute,record_datetime.second), "datetime":json_data[0]['datetime']  ,"quantity_total": quantity, "average_price": "{:.2f}".format(average_prices), "min_price": min_price, "max_price": max_price})
         await websocket.send_text(f"Data received: {data}")
     except WebSocketDisconnect:
         await websocket.close()
