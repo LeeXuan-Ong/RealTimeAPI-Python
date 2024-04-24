@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>This is a Heading</h1>
+<p>This is a paragraph.</p>
+<table>
+  <tr>
+    <th>Datetime</th>
+    <th>Quantity Total</th>
+    <th>Average Price</th>
+    <th>Min Price</th>
+    <th>Max Price</th>
+  </tr>
+
+  {% for item in items %}
+  <tr>
+    <td>{{ item.datetime }}</td>
+    <td>{{ item.quantity_total }}</td>
+    <td>{{ item.average_price }}</td>
+    <td>{{ item.min_price }}</td>
+    <td>{{ item.max_price }}</td>
+  </tr>
+  
+  {% endfor %}
+</table>
+
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: [{% for item in items %}"{{ item.datetime }}", {% endfor %}],
+          datasets: [{
+              label: 'My First Dataset',
+              data: [{% for item in items %}{{ item.average_price }}, {% endfor %}],
+              fill: false,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.1
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+  });
+
+</script>
+</body>
+</html>

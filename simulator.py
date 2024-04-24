@@ -10,12 +10,14 @@ async def send_message(message):
     async with websockets.connect(uri) as websocket:
         await websocket.send(message)
         # print(f">>> {message}")
-        
-        response = await websocket.recv()
-        # print(f"<<< {response}")
-        if(response != ""):
+        try:
+          response = await websocket.recv()
+          # print(f"<<< {response}")
+          if(response != ""):
             print("Data sent successfully")
-        
+        except websockets.exceptions.ConnectionClosedError:
+          print("Connection closed by server")
+          pass
 
 df = pd.read_csv('AAPL.csv')
 processed_datetime = df["datetime"]
@@ -38,7 +40,7 @@ for index, row in df.iterrows():
     
     next_datetime = datetime.datetime.strptime(df.loc[index+1, "datetime"],'%Y-%m-%d %H:%M:%S:%f')
     
-    cache_data.append({"timestamp":timestamp.strftime('%Y-%m-%d %H:%M:%S:%f'), "price":price, "quantity":quantity, "venue":venue})
+    cache_data.append({"datetime":timestamp.strftime('%Y-%m-%d %H:%M:%S:%f'), "price":price, "quantity":quantity, "venue":venue})
 
     if(next_datetime == timestamp):
         print("Date time is same as previous data")
